@@ -1,74 +1,71 @@
 package cubic_tap_code
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestDecode(t *testing.T) {
-	t.Run("decode a single sign", func(t *testing.T) {
-		encodedTest := ".. .. .."
+	decodingTests := []struct {
+		name    string
+		encoded string
+		want    string
+	}{
+		{
+			"decode a single sign",
+			".. .. ..",
+			"N",
+		},
+		{
+			"decode a string of dots",
+			".. . ... .. .. . . . ... .. . ...",
+			"TEST",
+		},
+		{
+			"decode a string of dots with spaces",
+			".. ... . .. .. . ... . .. ... . .. ... .. .. ... ... ... .. .. ... ... .. .. ... ... .. ... . .. . .. .",
+			"HELLO WORLD",
+		},
+	}
 
-		got := Decode(encodedTest)
-		want := "N"
-
-		if got != want {
-			t.Errorf("got %q want %q given, %q", got, want, encodedTest)
-		}
-	})
-
-	t.Run("decode a string of dots", func(t *testing.T) {
-		encodedTest := ".. . ... .. .. . . . ... .. . ..."
-
-		got := Decode(encodedTest)
-		want := "TEST"
-
-		if got != want {
-			t.Errorf("got %q want %q given, %q", got, want, encodedTest)
-		}
-	})
-
-	t.Run("decode a string of dots with spaces", func(t *testing.T) {
-		encodedTest := ".. ... . .. .. . ... . .. ... . .. ... .. .. ... ... ... .. .. ... ... .. .. ... ... .. ... . .. . .. ."
-
-		got := Decode(encodedTest)
-		want := "HELLO WORLD"
-
-		if got != want {
-			t.Errorf("got %q want %q given, %q", got, want, encodedTest)
-		}
-	})
-
+	for _, tt := range decodingTests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := Decode(tt.encoded)
+			if got != tt.want {
+				t.Errorf("got %q want %q given, %q", got, tt.want, tt.encoded)
+			}
+		})
+	}
 }
 
 func TestEncode(t *testing.T) {
-	t.Run("Encode a single character", func(t *testing.T) {
-		encodedTest := "W"
 
-		got := Encode(encodedTest)
-		want := ".. .. ..."
-
-		if got != want {
-			t.Errorf("got %q want %q given, %q", got, want, encodedTest)
-		}
-	})
-
-	t.Run("Encode a word", func(t *testing.T) {
-		encodedTest := "TEST"
-
-		got := Encode(encodedTest)
-		want := ".. . ... .. .. . . . ... .. . ..."
-
-		if got != want {
-			t.Errorf("got %q want %q given, %q", got, want, encodedTest)
-		}
-	})
-
-	t.Run("Encode a word with spaces", func(t *testing.T) {
-		encodedTest := "HELLO WORLD"
-
-		got := Encode(encodedTest)
-		want := ".. ... . .. .. . ... . .. ... . .. ... .. .. ... ... ... .. .. ... ... .. .. ... ... .. ... . .. . .. ."
-
-		if got != want {
-			t.Errorf("got %q want %q given, %q", got, want, encodedTest)
-		}
-	})
+	encodingTests := []struct {
+		name    string
+		decoded string
+		want    string
+	}{
+		{
+			"Encode a single character",
+			"W",
+			".. .. ...",
+		},
+		{
+			"Encode a word",
+			"TEST",
+			".. . ... .. .. . . . ... .. . ...",
+		},
+		{
+			"Encode a word with spaces",
+			"HELLO WORLD",
+			".. ... . .. .. . ... . .. ... . .. ... .. .. ... ... ... .. .. ... ... .. .. ... ... .. ... . .. . .. .",
+		},
+	}
+	for _, tt := range encodingTests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := Encode(tt.decoded)
+			if got != tt.want {
+				t.Errorf("got %q want %q given, %q", got, tt.want, tt.decoded)
+			}
+		})
+	}
 }
