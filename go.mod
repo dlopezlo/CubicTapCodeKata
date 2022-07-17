@@ -1,3 +1,3 @@
-module github.com/dlopezlo/CubicTapCodeKata
+module github.com/dlopezlo/cubicTapCodeKata
 
 go 1.18
